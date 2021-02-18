@@ -13,60 +13,48 @@ namespace WindowsFormsApp2
         public string Path { get; set; }
 
 
+        public string[] Head { get; private set; }
+        public List<string[]> Datasets { get; private set; } = new List<string[]>() ;
+
+
         public extract(string _path)
         {
             Path = _path;
+
+            getData();
         }
+
 
 
         public void getData()
         {
             int zeilen, spalten;
 
-            string[] csvDatei = File.ReadAllLines(Path);
+            string[] datei = File.ReadAllLines(Path);
 
-            zeilen = csvDatei.Length;
-            spalten = csvDatei[0].Split(';').Length;
-
-            string[,] matrix = new string[zeilen, spalten];
+            zeilen = datei.Length;
+            spalten = datei[0].Split(';').Length;
 
             for (int zeile = 0; zeile < zeilen; zeile++)
             {
-                string[] werte = csvDatei[zeile].Split(';');
+                string[] set = new string[spalten];
 
                 for (int spalte = 0; spalte < spalten; spalte++)
                 {
-                    matrix[zeile, spalte] = werte[spalte];
+                    set[spalte] = datei[zeile].Split(';')[spalte];
+                }
+
+                if (zeile < 1)
+                {
+                    Head = set;
+                }
+                else
+                {
+                    Datasets.Add(set);
                 }
             }
 
         }
 
-        public void convertToPerson(ref List<person> Personen)
-        {
-            string[] csvDatei = File.ReadAllLines(Path);
-            string[] head = csvDatei[0].ToLower().Split(';');
-
-
-            //string[] bla = { "vorname", "nachname", "alter", "geschlecht", "id" };
-
-
-            int name = Array.IndexOf(head, "vorname");
-            int surname = Array.IndexOf(head, "nachname");
-            int age = Array.IndexOf(head,"alter");
-            int gender = Array.IndexOf(head, "geschlecht");
-            int id = Array.IndexOf(head, "id");
-
-            //List<person> Personen = new List<person>();
-
-            for (int i = 1; i < File.ReadAllLines(Path).Length; i++)
-            {
-                string[] subString = csvDatei[i].Split(';');
-                Personen.Add(new person {Name = subString[name], SurName = subString[surname], Age = Convert.ToInt32(subString[age]), Gender = subString[gender], Id = Convert.ToInt32(subString[id]) });
-            }
-
-            
-            
-        }
     }
 }

@@ -49,16 +49,16 @@ namespace WindowsFormsApp2
 
                 extract E = new extract (this.openFileDialog1.FileName);
 
-                
+                dataGridView1.ColumnCount = E.Head.Length;
+                for (int i = 0; i < E.Head.Length; i++)
+                {
+                    dataGridView1.Columns[i].Name = E.Head[i];
+                }
+                for (int zeile = 0; zeile < E.Datasets.Count; zeile++)
+                {
+                    dataGridView1.Rows.Add(E.Datasets[zeile]);
+                }
 
-                E.convertToPerson(ref Personen);
-
-                Personen.Sort();
-                dataGridView1.DataSource = Personen;
-                
-                listBox1.DataSource = Personen;
-                listBox1.DisplayMember = "Info";
-                
 
             }
             
